@@ -1,0 +1,13 @@
+DELETE : Parameter : add choice between ipv4/ipv6 or both
+DELETE : Parameter : add choice between wifi/cell or both
+// Parameter : add choice for secondary dns
+Main : Notification icon for status
+Main : set default dns choice
+Parameter : add on boot option
+Main : Check launched on starting
+// Main : launch dnscrypt with command dnscrypt-proxy -a 127.0.0.1 -d -l log with su rights
+// Main : change dns settings with :
+# ndc resolver flushif <iface>
+# ndc resolver flushdefaultif
+# ndc resolver setifdns <iface> <dns1> <dns2>
+# ndc resolver setdefaultif <iface>

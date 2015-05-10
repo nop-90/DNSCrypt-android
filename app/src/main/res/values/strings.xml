@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DNSCrypt</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_log_view">DNSCrypt log</string>
+    <string name="action_showlog">Show console output</string>
+    <string name="activate_text">Activate DNSCrypt service</string>
+    <string name="listening_on">DNS proxy listening on :</string>
+    <string name="proxy_list">List of DNSCrypt servers :</string>
+    <string name="parameter_title">Parameters</string>
+    <string name="state">state</string>
+</resources>

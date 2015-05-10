@@ -1,0 +1,39 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="boot"
+        android:title="@string/pref_boot"
+        android:summary="@string/pref_boot_desc"
+        android:checked="false" />
+
+   <!-- <ListPreference
+        android:key="ip_version"
+        android:title="@string/pref_ip_version"
+        android:defaultValue=""
+        android:entries="@array/pref_ip_titles"
+        android:entryValues="@array/pref_ip_titles"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" /> -->
+
+    <!-- <ListPreference
+        android:key="wifi_cell"
+        android:title="@string/pref_wifi_cell"
+        android:defaultValue=""
+        android:entries="@array/pref_wifi_cell_titles"
+        android:entryValues="@array/pref_wifi_cell_titles"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" /> -->
+    <EditTextPreference
+        android:key="default_dns"
+        android:title="@string/pref_dns_secondary"
+        android:summary="@string/pref_dns_secondary_desc"
+        android:dialogTitle="@string/pref_dns_secondary_title"
+        android:defaultValue="" />
+
+    <EditTextPreference
+        android:key="secondary_dns"
+        android:title="@string/pref_dns_secondary"
+        android:summary="@string/pref_dns_secondary_desc"
+        android:dialogTitle="@string/pref_dns_secondary_title"
+        android:defaultValue="" />
+</PreferenceScreen>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="title_activity_parameters">Parameters</string>
+    <string name="pref_header_general">General</string>
+    <string name="pref_boot_desc">Authorize the application to change DNS at boot</string>
+    <string name="pref_boot">Enable DNSCrypt at boot</string>
+    <string name="pref_ip_version">IPv4/IPv6 listening</string>
+    <string name="pref_wifi_cell">Enable DNSCrypt on connections</string>
+    <string name="pref_dns_secondary">DNS server secondary :</string>
+    <string name="pref_dns_secondary_desc">Set a second dns server in case the first doesn\'t work. Default : none</string>
+    <string name="pref_dns_secondary_title">Type DNS server address :</string>
+</resources>

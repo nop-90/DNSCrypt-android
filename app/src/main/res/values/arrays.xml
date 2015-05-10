@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_ip_titles">
+        <item>IPv4</item>
+        <item>IPv6</item>
+        <item>@string/both</item>
+    </string-array>
+    <string-array name="pref_wifi_cell_titles">
+        <item>WiFi</item>
+        <item>Cell</item>
+        <item>@string/both</item>
+    </string-array>
+    <string name="both">Both</string>
+</resources>
