@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
         OutputStream out = null;
         try {
             in = assetManager.open(filename);
-            File outFile = new File(getApplicationInfo().dataDir+"/files/",filename);
+            File outFile = new File(getApplicationInfo().dataDir+"/",filename);
             out = new FileOutputStream(outFile);
             copyFile(in, out);
         } catch(IOException e) {
@@ -103,7 +103,7 @@ public class MainActivity extends ActionBarActivity {
         list_files.add("libsodium.so");
         list_files.add("dnscrypt-resolvers.csv");
         for (String text_exists : list_files) {
-            File file = new File(info.dataDir+"/files/"+text_exists);
+            File file = new File(info.dataDir+"/"+text_exists);
             if (!file.exists()) {
                 copyAssets(text_exists);
             }
@@ -111,7 +111,7 @@ public class MainActivity extends ActionBarActivity {
                 Log.i("FILE","File "+text_exists+" exists");
             }
         }
-        sendCommand("chmod -R 0777 "+info.dataDir+"/files/");
+        sendCommand("chmod -R 0777 "+info.dataDir);
         AssetManager assetManager = getAssets();
         final ListView dns_list = (ListView) findViewById(R.id.servers_list);
         final ArrayList<HashMap<String, Object>> data = new ArrayList<>();
@@ -164,7 +164,7 @@ public class MainActivity extends ActionBarActivity {
                 setServerSelected(obj.get("server_name"));
             }
         });
-
+        // TODO fix bug who shows "state" at start
         // Set Item at pos checked : dns_list.setItemChecked(pos, true);
         Switch onoff = (Switch) findViewById(R.id.activation);
         onoff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -192,26 +192,31 @@ public class MainActivity extends ActionBarActivity {
             }
         });
     }
+    // TODO save selected server for the next start
     public void stopDNS() {
         TextView listen_text = (TextView) findViewById(R.id.address);
         listen_text.setText("éteint");
         listen_text.setTextColor(Color.RED);
         sendCommand("killall dnscrypt-crypt");
+        /* Kitkat commands
         sendCommand("ndc resolver flushif wlan0");
         sendCommand("ndc resolver flushdefaultif");
         sendCommand("ndc resolver setifdns wlan0 "+dns_default+" "+dns_default2);
         sendCommand("ndc resolver setdefaultif wlan0");
+        */
+        sendCommand("ndc resolver setnetdns wlan0 "+dns_default+" "+dns_default2);
     }
     public void startDNS() {
         Log.d("Settings status", prefs.getBoolean("boot", false) + " " + prefs.getString("secondary_dns", "not set"));
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("dns_default",getServerSelected());
         editor.commit();
-        sendCommand("LD_LIBRARY_PATH=\"" + info.dataDir + "/files/\" " + info.dataDir + "/files/dnscrypt-proxy -a 127.0.0.1:53 -l " + info.dataDir + "/files/log -L " + info.dataDir + "/files/dnscrypt-resolvers.csv -R " + getServerSelected());
+        sendCommand("LD_LIBRARY_PATH=\"" + info.dataDir + "/\" " + info.dataDir + "/dnscrypt-proxy -a 127.0.0.1:53 -l " + info.dataDir + "/log -L " + info.dataDir + "/dnscrypt-resolvers.csv -R " + getServerSelected());
         WifiManager wifi = (WifiManager) getSystemService(WIFI_SERVICE);
         DhcpInfo info = wifi.getDhcpInfo();
         dns_default = intToIp(info.dns1);
         dns_default2 = intToIp(info.dns2);
+        /* KitKat commands
         sendCommand("ndc resolver flushif wlan0");
         sendCommand("ndc resolver flushdefaultif");
         String secondary_dns = prefs.getString("secondary_dns","");
@@ -221,7 +226,14 @@ public class MainActivity extends ActionBarActivity {
         else {
             sendCommand("ndc resolver setifdns wlan0 127.0.0.1 "+secondary_dns);
         }
-        sendCommand("ndc resolver setdefaultif wlan0");
+        sendCommand("ndc resolver setdefaultif wlan0");*/
+        String secondary_dns = prefs.getString("secondary_dns","");
+        if (secondary_dns.equals("")) {
+            sendCommand("ndc resolver setnetdns wlan0 127.0.0.1 "+dns_default);
+        }
+        else {
+            sendCommand("ndc resolver setnetdns wlan0 127.0.0.1 "+secondary_dns);
+        }
         TextView listen_text = (TextView) findViewById(R.id.address);
         listen_text.setText("127.0.0.1:53");
         listen_text.setTextColor(Color.BLUE);
@@ -238,6 +250,7 @@ public class MainActivity extends ActionBarActivity {
                 ((i >> 16) & 0xFF) + "." +
                 ((i >> 24) & 0xFF);
     }
+    // TODO check if wifi powered on
     public void sendCommand(String commands) {
         Command command = new Command(0, commands)
         {
