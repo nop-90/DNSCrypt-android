@@ -21,7 +21,7 @@ public class LogView extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_view);
 
-        File file = new File(getApplicationInfo().dataDir+"/files/log");
+        File file = new File(getApplicationInfo().dataDir+"/log");
 
         StringBuilder text = new StringBuilder();
         try {

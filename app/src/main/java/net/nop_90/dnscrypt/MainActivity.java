@@ -106,12 +106,15 @@ public class MainActivity extends ActionBarActivity {
             File file = new File(info.dataDir+"/"+text_exists);
             if (!file.exists()) {
                 copyAssets(text_exists);
+                if (text_exists.equals("dnscrypt-proxy") || text_exists.equals("hostip")) {
+                    sendCommand("chmod 0755 " + info.dataDir+"/"+text_exists);
+                }
             }
             else {
                 Log.i("FILE","File "+text_exists+" exists");
             }
         }
-        sendCommand("chmod -R 0777 "+info.dataDir);
+        sendCommand("chmod 0755 " + info.dataDir);
         AssetManager assetManager = getAssets();
         final ListView dns_list = (ListView) findViewById(R.id.servers_list);
         final ArrayList<HashMap<String, Object>> data = new ArrayList<>();
@@ -251,7 +254,8 @@ public class MainActivity extends ActionBarActivity {
                 ((i >> 24) & 0xFF);
     }
     // TODO check if wifi powered on
-    public void sendCommand(String commands) {
+    public void sendCommand(final String commands) {
+        Log.d("SHELL command ",commands);
         Command command = new Command(0, commands)
         {
             @Override
