@@ -8,5 +8,5 @@
     <string name="listening_on">DNS proxy listening on :</string>
     <string name="proxy_list">List of DNSCrypt servers :</string>
     <string name="parameter_title">Parameters</string>
-    <string name="state">state</string>
+    <string name="state">stopped</string>
 </resources>

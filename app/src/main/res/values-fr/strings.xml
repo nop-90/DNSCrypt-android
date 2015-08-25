@@ -17,6 +17,6 @@
     <string name="pref_dns_secondary_desc">Entrez une adresse d\'un serveur DNS secondaire au cas où le primaire ne fonctionne pas. Défaut : aucun</string>
     <string name="pref_dns_secondary_title">Entrez l\'adresse d\'un serveur DNS :</string>
     <string name="parameter_title">Paramètres</string>
-    <string name="state">state</string>
+    <string name="state">éteint</string>
 
 </resources>

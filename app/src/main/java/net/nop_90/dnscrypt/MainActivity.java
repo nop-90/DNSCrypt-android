@@ -8,7 +8,9 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -25,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.stericson.RootTools.RootTools;
 import com.stericson.RootTools.exceptions.RootDeniedException;
@@ -39,7 +42,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import au.com.bytecode.opencsv.*;
@@ -167,15 +169,12 @@ public class MainActivity extends ActionBarActivity {
                 setServerSelected(obj.get("server_name"));
             }
         });
-        // TODO fix bug who shows "state" at start
-        // Set Item at pos checked : dns_list.setItemChecked(pos, true);
         Switch onoff = (Switch) findViewById(R.id.activation);
         onoff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     if (getServerSelected() != null) {
-                        // Log.d("Server Selected",getServerSelected());
-                        MainActivity.this.startDNS();
+                        MainActivity.this.checkWifiState();
                     } else {
                         AlertDialog.Builder server_alert = new AlertDialog.Builder(MainActivity.this);
                         server_alert.setMessage("You haven't selected a server");
@@ -196,6 +195,7 @@ public class MainActivity extends ActionBarActivity {
         });
     }
     // TODO save selected server for the next start
+    // Set Item at pos checked : dns_list.setItemChecked(pos, true);
     public void stopDNS() {
         TextView listen_text = (TextView) findViewById(R.id.address);
         listen_text.setText("éteint");
@@ -207,7 +207,7 @@ public class MainActivity extends ActionBarActivity {
         sendCommand("ndc resolver setifdns wlan0 "+dns_default+" "+dns_default2);
         sendCommand("ndc resolver setdefaultif wlan0");
         */
-        sendCommand("ndc resolver setnetdns wlan0 "+dns_default+" "+dns_default2);
+        sendCommand("ndc resolver setnetdns wlan0 " + dns_default + " " + dns_default2);
     }
     public void startDNS() {
         Log.d("Settings status", prefs.getBoolean("boot", false) + " " + prefs.getString("secondary_dns", "not set"));
@@ -253,7 +253,16 @@ public class MainActivity extends ActionBarActivity {
                 ((i >> 16) & 0xFF) + "." +
                 ((i >> 24) & 0xFF);
     }
-    // TODO check if wifi powered on
+    public void checkWifiState() {
+        ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo.State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+        if (wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING) {
+            startDNS();
+        }
+        else {
+            Toast.makeText(this.getApplicationContext(),"La connexion Wifi est indisponible",Toast.LENGTH_SHORT);
+        }
+    }
     public void sendCommand(final String commands) {
         Log.d("SHELL command ",commands);
         Command command = new Command(0, commands)
